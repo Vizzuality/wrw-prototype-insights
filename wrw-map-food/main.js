@@ -39,7 +39,7 @@ var countryLayer={
       type: 'cartodb',
       sublayers: [{
         sql: 'SELECT * FROM countriedata',
-        cartocss:'#countriedata{ polygon-fill: transparent; polygon-opacity: 0.7; line-color: #000000; line-width: 0.5; line-opacity: 1;}',
+        cartocss:'#countriedata{ polygon-fill: transparent; polygon-opacity: 0.7; line-color: #000000; line-width: 0.5; line-opacity: 0.1;}',
         interactivity: ['cartodb_id', 'y2014']
        
        }],
