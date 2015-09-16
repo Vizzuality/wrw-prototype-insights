@@ -66,7 +66,6 @@ var startVis = function() {
    //y asi es como se añade interactivity con un infowindow!
   cartodb.createLayer(map,countryLayer).addTo(map)
     .done(function(layer) {
-      console.log(countryLayer.sublayers[0].interactivity);
       cdb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), countryLayer.sublayers[0].interactivity);
     });
 
