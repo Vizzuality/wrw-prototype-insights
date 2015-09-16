@@ -1,7 +1,7 @@
 /* LAYERS */
 //scenarios
 var year = [20,30,40];
-var scenario = [24,28,38];
+var scenarios = 28;
 
 //water stress scenario generator
 var stresScenario = function(year,scenario) {
@@ -33,24 +33,27 @@ var stresScenario = function(year,scenario) {
 
   return scenario
 };
-//crops
-
+//countryLayer that will go on top
+var countryLayer={
+  user_name: 'insights',
+      type: 'cartodb',
+      sublayers: [{
+        sql: 'SELECT * FROM countriedata',
+        cartocss:'#countriedata{ polygon-fill: transparent; polygon-opacity: 0.7; line-color: #000000; line-width: 0.5; line-opacity: 1;}',
+        interactivity: ['cartodb_id', 'y2014']
+       
+       }],
+    };
 //population
 
-var Layer2020A,
-    Layer2020B,
-    Layer2020C,
-    Layer2030A,
+var Layer2020B,
     Layer2030B,
-    Layer2030C,
-    Layer2040A,
-    Layer2040B,
-    Layer2040C;     
+    Layer2040B;     
          
 var startVis = function() {
   
   var baseMaps = {
-    "Basemap": L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}', {maxZoom: 18, zIndex:1})
+    "Basemap": L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}', {maxZoom: 18, zIndex:0})
     };
   var map = L.map('map', {
     scrollWheelZoom: true,
@@ -58,55 +61,34 @@ var startVis = function() {
     zoom: 3,
     layers:[baseMaps.Basemap]
   });
-   
-   cartodb.createLayer(map,stresScenario(year[0],scenario[0])).addTo(map)
-  .done(function(layer){
-    Layer2020A = layer
-    cartodb.createLayer(map,stresScenario(year[0],scenario[1])).addTo(map)
-    .done(function(layer){
-    Layer2020B=layer;
-      cartodb.createLayer(map,stresScenario(year[0],scenario[2])).addTo(map)
-      .done(function(layer){
-      Layer2020C=layer;
-      cartodb.createLayer(map,stresScenario(year[1],scenario[0])).addTo(map)
-      .done(function(layer){
-        Layer2030A=layer; 
-        cartodb.createLayer(map,stresScenario(year[1],scenario[1])).addTo(map)
-        .done(function(layer){
-          Layer2030B=layer; 
-          cartodb.createLayer(map,stresScenario(year[1],scenario[2])).addTo(map)
-          .done(function(layer){
-            Layer2030C=layer; 
-            cartodb.createLayer(map,stresScenario(year[2],scenario[0])).addTo(map)
-            .done(function(layer){
-              Layer2040A=layer;
-              cartodb.createLayer(map,stresScenario(year[2],scenario[1])).addTo(map)
-              .done(function(layer){
-                Layer2040B=layer; 
-                cartodb.createLayer(map,stresScenario(year[2],scenario[2])).addTo(map)
-                .done(function(layer){
-                  Layer2040C=layer;
-                  var stresScenarios = {
-                      "2020_scenario_A":Layer2020A,
-                      "2020_scenario_B":Layer2020B,
-                      "2020_scenario_C":Layer2020C,
-                      "2030_scenario_A":Layer2030A,
-                      "2030_scenario_B":Layer2030B,
-                      "2030_scenario_C":Layer2030C,
-                      "2040_scenario_A":Layer2040A,
-                      "2040_scenario_B":Layer2040B,
-                      "2040_scenario_C":Layer2040C
-                    };
-                    L.control.layers(stresScenarios, null).addTo(map);
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
+
+  cartodb.createLayer(map,stresScenario(year[1],scenarios)).addTo(map)
+   //y asi es como se añade interactivity con un infowindow!
+  cartodb.createLayer(map,countryLayer).addTo(map)
+    .done(function(layer) {
+      console.log(countryLayer.sublayers[0].interactivity);
+      cdb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), countryLayer.sublayers[0].interactivity);
     });
-  });
+
+  // .done(function(layer){
+  //   Layer2020B = layer
+  //   cartodb.createLayer(map,stresScenario(year[1],scenarios)).addTo(map)
+  //   .done(function(layer){
+  //   Layer2030B=layer;
+  //     cartodb.createLayer(map,stresScenario(year[2],scenarios)).addTo(map)
+  //     .done(function(layer){
+  //     Layer2040B=layer;
+  //         var stresScenarios = {
+  //         "2020_scenario_B":Layer2020B,
+  //         "2030_scenario_B":Layer2030B,
+  //         "2040_scenario_B":Layer2040B
+  //         };
+  //         L.control.layers(stresScenarios, null).addTo(map);    
+  //     });
+  //   });
+  // });
+       
+  
 
 
 };
