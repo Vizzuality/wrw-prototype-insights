@@ -53,7 +53,7 @@ var Layer2020B,
 var startVis = function() {
   
   var baseMaps = {
-    "Basemap": L.tileLayer('https://a.tiles.mapbox.com/v4/smbtc.7d2e3bf9/{z}/{y}/{x}.png?access_token=pk.eyJ1Ijoic21idGMiLCJhIjoiVXM4REppNCJ9.pjaLujYj-fcCPv5evG_0uA', {maxZoom: 18, zIndex:0})
+    "Basemap": L.tileLayer('https://a.tiles.mapbox.com/v4/smbtc.7d2e3bf9/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic21idGMiLCJhIjoiVXM4REppNCJ9.pjaLujYj-fcCPv5evG_0uA', {maxZoom: 18, zIndex:0})
     };
   var map = L.map('map', {
     scrollWheelZoom: true,
